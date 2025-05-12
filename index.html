@@ -9,6 +9,8 @@
       margin: 0;
       padding: 0;
       background: black;
+      color: #00ff00;
+      font-family: "Courier New", Courier, monospace;
       overflow: hidden;
       height: 100%;
       width: 100%;
@@ -34,34 +36,80 @@
       z-index: 2;
     }
 
+    .username a {
+      color: #00bfff;
+      text-decoration: none;
+    }
+
     .invisible-button {
       position: absolute;
       top: 0;
       left: 0;
       height: 100%;
       width: 100%;
-      z-index: 1;
       background: transparent;
       border: none;
+      z-index: 3;
+    }
+
+    .osaka-container {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 4;
+    }
+
+    .osaka-container img {
+      width: 120px;
+    }
+
+    .circle {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #00ff00;
+      border-radius: 50%;
+      margin: 0 auto 5px;
+      line-height: 60px;
+      color: #00ff00;
+      font-size: 12px;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .caption {
+      color: #00ff00;
+      font-size: 14px;
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
   <canvas id="matrixCanvas"></canvas>
+
   <div class="username">
-    <a href="https://www.instagram.com/_parallox_/" target="_blank" style="color:#00bfff; text-decoration:none;">@_parallox_</a>
+    <a href="https://www.instagram.com/_parallox_/" target="_blank">@_parallox_</a>
   </div>
+
+  <div class="osaka-container">
+    <div class="circle">Tap Here</div>
+    <img src="https://i.imgur.com/pxi7BBe.png" alt="Osaka" />
+    <div class="caption">SATA ANDAGI</div>
+  </div>
+
   <button class="invisible-button" onclick="playSound()"></button>
-  <audio id="earblast" loop>
-    <source src="https://media.vocaroo.com/1cuSRkxoDnnV" type="audio/mpeg" />
+  <audio id="trollSound">
+    <source src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/Orgasm%20troll%20sound_memes_video(MP3_160K).mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
   </audio>
 
   <script>
-    // Matrix text animation
     const canvas = document.getElementById("matrixCanvas");
     const ctx = canvas.getContext("2d");
+
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
+
     const letters = "PARALLOX".split("");
     const fontSize = 16;
     const columns = Math.floor(canvas.width / fontSize);
@@ -70,29 +118,33 @@
     function draw() {
       ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       ctx.fillStyle = "#00ff00";
       ctx.font = fontSize + "px Courier New";
+
       for (let i = 0; i < drops.length; i++) {
         const text = letters[Math.floor(Math.random() * letters.length)];
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
+
         drops[i]++;
       }
     }
+
     setInterval(draw, 50);
+
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     });
 
-    // Earblast trigger
     function playSound() {
-      const audio = document.getElementById("earblast");
-      audio.volume = 1.0; // max volume
-      audio.playbackRate = 1.75; // optional: makes it high-pitched
-      audio.play().catch(err => console.error("Playback failed:", err));
+      const audio = document.getElementById("trollSound");
+      audio.volume = 1.0;
+      audio.play().catch((e) => console.log("Play error:", e));
     }
   </script>
 </body>
