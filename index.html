@@ -1,7 +1,8 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Parallox</title>
   <style>
     html, body {
@@ -13,48 +14,48 @@
       overflow: hidden;
       height: 100%;
       width: 100%;
-    }.matrix {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: black;
-  overflow: hidden;
-  z-index: 0;
-}
+    }
 
-canvas {
-  display: block;
-}
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
 
-.username {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #00bfff;
-  font-size: 12px;
-  font-family: "Courier New", Courier, monospace;
-  text-shadow: 0 0 5px #00bfff;
-  z-index: 1;
-}
-
+    .username {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #00bfff;
+      font-size: 20px;
+      font-family: "Courier New", Courier, monospace;
+      text-shadow: 0 0 5px #00bfff;
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
   <canvas id="matrixCanvas"></canvas>
-  <div class="username">@_parallox_</div>  <script>
+  <div class="username">@_parallox_</div>
+  <audio autoplay loop>
+    <source src="https://docs.google.com/uc?export=download&id=1-1hjPJ6FCcN7Ek5Lir8cl6B9ceyf_kPg" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
     const canvas = document.getElementById("matrixCanvas");
     const ctx = canvas.getContext("2d");
 
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
 
-    const letters = "PARALLOX";
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
+    const letters = "PARALLOX".split("");
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
 
     function draw() {
       ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
@@ -70,10 +71,17 @@ canvas {
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
+
         drops[i]++;
       }
     }
 
     setInterval(draw, 50);
-  </script></body>
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
 </html>
