@@ -2,122 +2,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>parallox</title>
+  <title>Paralox</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
       background: black;
-      color: limegreen;
-      font-family: 'Courier New', Courier, monospace;
-    }.floating-text {
+      color: #00ff00;
+      font-family: "Courier New", Courier, monospace;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }.matrix {
   position: absolute;
-  font-size: 16px;
-  pointer-events: none;
-  opacity: 0.5;
-  animation: float 20s linear infinite;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  overflow: hidden;
+  z-index: 0;
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(100vh) rotate(0deg);
-  }
-  100% {
-    transform: translateY(-100vh) rotate(360deg);
-  }
+canvas {
+  display: block;
 }
 
-.globe-container {
+.username {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotateX(20deg);
-  perspective: 1000px;
-}
-
-.globe {
-  width: 300px;
-  height: 300px;
-  position: relative;
-  animation: spin 10s linear infinite;
-}
-
-.globe span {
-  position: absolute;
-  color: limegreen;
-  font-size: 10px;
-  white-space: nowrap;
-  text-shadow: 0 0 5px lime;
-}
-
-@keyframes spin {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(360deg); }
-}
-
-.glitch {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 28px;
-  color: lime;
-  text-shadow: 0 0 5px lime, 0 0 10px limegreen;
-  animation: glitch 1s infinite;
-}
-
-@keyframes glitch {
-  0% { transform: translate(-50%, -1px); }
-  20% { transform: translate(-50%, 1px); }
-  40% { transform: translate(-50%, -2px); }
-  60% { transform: translate(-50%, 2px); }
-  80% { transform: translate(-50%, -1px); }
-  100% { transform: translate(-50%, 1px); }
-}
-
-.insta {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 10px;
-  color: #00f0ff;
-  text-shadow: 0 0 3px #00f0ff;
+  transform: translate(-50%, -50%);
+  color: #00bfff;
+  font-size: 12px;
+  font-family: "Courier New", Courier, monospace;
+  text-shadow: 0 0 5px #00bfff;
+  z-index: 1;
 }
 
   </style>
 </head>
 <body>
-  <div class="glitch">parallox</div>
-  <div class="globe-container">
-    <div class="globe" id="globe"></div>
-  </div>
-  <div class="insta">@_parallox_</div>  <script>
-    const globe = document.getElementById('globe');
-    const layers = 30;
-    const pointsPerLayer = 30;
+  <canvas id="matrixCanvas"></canvas>
+  <div class="username">@_paralox_</div>  <script>
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
 
-    for (let i = 0; i < layers; i++) {
-      const angleY = (360 / layers) * i;
-      for (let j = 0; j < pointsPerLayer; j++) {
-        const span = document.createElement('span');
-        const angleX = (180 / pointsPerLayer) * j - 90;
-        span.textContent = 'parallox';
-        span.style.transform = `rotateY(${angleY}deg) rotateX(${angleX}deg) translateZ(140px)`;
-        globe.appendChild(span);
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "PARALOX";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ff00";
+      ctx.font = fontSize + "px Courier New";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
       }
     }
 
-    // floating hacker text
-    for (let i = 0; i < 100; i++) {
-      const floaty = document.createElement('div');
-      floaty.classList.add('floating-text');
-      floaty.textContent = 'parallox';
-      floaty.style.left = Math.random() * 100 + 'vw';
-      floaty.style.top = Math.random() * 100 + 'vh';
-      floaty.style.animationDuration = (10 + Math.random() * 20) + 's';
-      document.body.appendChild(floaty);
-    }
+    setInterval(draw, 50);
   </script></body>
 </html>
