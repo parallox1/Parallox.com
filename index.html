@@ -33,14 +33,36 @@
       font-size: 20px;
       font-family: "Courier New", Courier, monospace;
       text-shadow: 0 0 5px #00bfff;
+      z-index: 2;
+    }
+
+    .username a {
+      color: #00bfff;
+      text-decoration: none;
+    }
+
+    #audioTrigger {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
+      background: transparent;
+      border: none;
     }
   </style>
 </head>
 <body>
   <canvas id="matrixCanvas"></canvas>
-  <div class="username">@_parallox_</div>
-  <audio autoplay loop>
+
+  <div class="username">
+    <a href="https://www.instagram.com/_parallox_/" target="_blank">@_parallox_</a>
+  </div>
+
+  <button id="audioTrigger"></button>
+
+  <audio id="memeAudio" loop>
     <source src="https://docs.google.com/uc?export=download&id=1-1hjPJ6FCcN7Ek5Lir8cl6B9ceyf_kPg" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
@@ -81,6 +103,18 @@
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+    });
+
+    // Try autoplay on desktop
+    const audio = document.getElementById("memeAudio");
+    audio.play().catch(() => {
+      // fallback for mobile
+    });
+
+    // Mobile: full-screen invisible tap to play
+    document.getElementById("audioTrigger").addEventListener("click", () => {
+      audio.play();
+      document.getElementById("audioTrigger").remove(); // remove after first tap
     });
   </script>
 </body>
