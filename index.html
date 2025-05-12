@@ -7,71 +7,47 @@
   <style>
     body {
       margin: 0;
-      background: black;
+      background-color: black;
       overflow: hidden;
-      font-family: monospace;
       color: #00ff00;
+      font-family: monospace;
     }
-
     canvas {
       position: fixed;
       top: 0;
       left: 0;
-      z-index: -1;
+      z-index: 0;
+      opacity: 0.3;
     }
-
-    .centered {
+    .center {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      text-align: center;
-    }
-
-    a.username {
-      font-size: 1.5rem;
-      color: #3b82f6;
-      text-decoration: none;
-    }
-
-    .trap-box {
-      position: absolute;
-      bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 30px;
-      background-color: black;
-      cursor: pointer;
+      color: #00aaff;
+      font-size: 24px;
+      font-family: monospace;
+      z-index: 1;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
   <canvas id="matrix"></canvas>
-  <div class="centered">
-    <a class="username" href="https://instagram.com/_parallox_" target="_blank" id="trigger">@_parallox_</a>
-  </div>
-  <div class="trap-box" onclick="location.href='https://instagram.com/_parallox_';"></div>
-
-  <audio id="audio1" loop>
-    <source src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/mhm.mp3" type="audio/mpeg" />
-  </audio>
-  <audio id="audio2" loop>
-    <source src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/Website.mp3" type="audio/mpeg" />
-  </audio>
+  <div class="center">@_parallox_</div>
+  <audio id="audio1" src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/mhm.mp3" loop></audio>
+  <audio id="audio2" src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/Website.mp3" loop></audio>
 
   <script>
-    let triggered = false;
-    const audio1 = document.getElementById("audio1");
-    const audio2 = document.getElementById("audio2");
+    const audio1 = document.getElementById('audio1');
+    const audio2 = document.getElementById('audio2');
+    let hasPlayed = false;
 
-    document.body.addEventListener("click", () => {
-      if (!triggered) {
-        triggered = true;
-        audio1.volume = 1;
-        audio2.volume = 1;
+    document.body.addEventListener('click', () => {
+      if (!hasPlayed) {
         audio1.play();
         audio2.play();
+        hasPlayed = true;
       }
     });
 
@@ -81,27 +57,25 @@
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
 
-    const katakana = "アカサタナハマヤラワガザダバパイキシチニヒミリギジヂビピウクスツヌフムユルグズヅブプエケセテネヘメレゲゼデベペオコソトノホモヨロゴゾドボポヴ".split("");
-    const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-    const nums = "0123456789".split("");
-    const alphabet = katakana.concat(latin).concat(nums);
+    const chars = "アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const font_size = 16;
+    const columns = canvas.width / font_size;
+    const drops = [];
 
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
+    for (let x = 0; x < columns; x++)
+      drops[x] = 1;
 
     function draw() {
       ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#0F0";
-      ctx.font = fontSize + "px monospace";
+      ctx.fillStyle = "#00ff00";
+      ctx.font = font_size + "px monospace";
 
       for (let i = 0; i < drops.length; i++) {
-        const text = alphabet[Math.floor(Math.random() * alphabet.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * font_size, drops[i] * font_size);
+        if (drops[i] * font_size > canvas.height && Math.random() > 0.975)
           drops[i] = 0;
-        }
         drops[i]++;
       }
     }
