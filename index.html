@@ -1,116 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>PARALLOX</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parallox Trap</title>
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
       background: black;
       overflow: hidden;
-      height: 100%;
-      width: 100%;
-      cursor: pointer;
-    }
-
-    .matrix {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      color: #00ff00;
       font-family: monospace;
-      font-size: 18px;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: fall 10s linear infinite;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-100%); }
-      100% { transform: translateY(100%); }
-    }
-
-    a {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       color: #00ff00;
-      font-size: 24px;
-      text-decoration: none;
-      z-index: 10;
-    }
+      user-select: none;
+    }.matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  color: #00ff00;
+  font-size: 20px;
+  line-height: 20px;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: 0;
+}
 
-    .osaka {
-      position: absolute;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      z-index: 5;
-    }
+#ig {
+  color: #00aaff;
+  font-size: 24px;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  cursor: pointer;
+}
 
-    .caption {
-      position: absolute;
-      top: 23%;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      font-size: 14px;
-      z-index: 5;
-      font-family: sans-serif;
-    }
+#redirect {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 30px;
+  background: black;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+}
 
-    .blackbar {
-      position: absolute;
-      top: 18%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 12px;
-      background-color: black;
-      z-index: 6;
-    }
-
-    .click-area {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: 1;
-    }
   </style>
 </head>
 <body>
-  <div class="matrix" id="matrix">PARALLOX PARALLOX PARALLOX PARALLOX PARALLOX PARALLOX</div>
-
-  <img src="https://i.imgur.com/yHhJ7Lo.png" class="osaka" alt="Osaka">
-
-  <div class="blackbar"></div>
-  <div class="caption">SATA ANDAGI</div>
-
-  <a href="https://instagram.com/_parallox_" id="instaLink" target="_blank">@_parallox_</a>
-
-  <div class="click-area" id="trigger"></div>
-
-  <audio id="sfx" loop>
-    <source src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/Orgasm%20troll%20sound_memes_video(MP3_160K).mp3" type="audio/mpeg">
-  </audio>
-
-  <script>
+  <canvas class="matrix"></canvas>
+  <div id="ig">@_parallox_</div>
+  <a id="redirect" href="https://www.instagram.com/_parallox_/" target="_blank"></a>
+  <audio id="sfx" src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/Orgasm%20troll%20sound_memes_video(MP3_160K).mp3" loop></audio>  <script>
     const audio = document.getElementById("sfx");
-    const insta = document.getElementById("instaLink");
 
-    function playAudio(e) {
-      audio.play().catch(() => {});
+    const baitElements = [document.body, document.getElementById("ig")];
+
+    baitElements.forEach(el => {
+      el.addEventListener("click", () => {
+        audio.play().catch(e => {});
+      });
+    });
+
+    const canvas = document.querySelector(".matrix");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = "パラロックス0123456789".split("");
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00ff00";
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
     }
 
-    document.body.addEventListener("click", playAudio);
-
-    // Also trigger audio when Instagram link is clicked
-    insta.addEventListener("click", playAudio);
-  </script>
-</body>
+    setInterval(drawMatrix, 50);
+  </script></body>
 </html>
