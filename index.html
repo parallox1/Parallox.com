@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parallox Trap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parallox</title>
   <style>
     body {
       margin: 0;
@@ -10,84 +11,94 @@
       overflow: hidden;
       font-family: monospace;
       color: #00ff00;
-      user-select: none;
-    }.matrix {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-  color: #00ff00;
-  font-size: 20px;
-  line-height: 20px;
-  pointer-events: none;
-  opacity: 0.3;
-  z-index: 0;
-}
+    }
 
-#ig {
-  color: #00aaff;
-  font-size: 24px;
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  cursor: pointer;
-}
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
 
-#redirect {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 200px;
-  height: 30px;
-  background: black;
-  border: none;
-  cursor: pointer;
-  z-index: 2;
-}
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
 
+    a.username {
+      font-size: 1.5rem;
+      color: #3b82f6;
+      text-decoration: none;
+    }
+
+    .trap-box {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 30px;
+      background-color: black;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <canvas class="matrix"></canvas>
-  <div id="ig">@_parallox_</div>
-  <a id="redirect" href="https://www.instagram.com/_parallox_/" target="_blank"></a>
-  <audio id="sfx" src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/Orgasm%20troll%20sound_memes_video(MP3_160K).mp3" loop></audio>  <script>
-    const audio = document.getElementById("sfx");
+  <canvas id="matrix"></canvas>
+  <div class="centered">
+    <a class="username" href="https://instagram.com/_parallox_" target="_blank" id="trigger">@_parallox_</a>
+  </div>
+  <div class="trap-box" onclick="location.href='https://instagram.com/_parallox_';"></div>
 
-    const baitElements = [document.body, document.getElementById("ig")];
+  <audio id="audio1" loop>
+    <source src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/mhm.mp3" type="audio/mpeg" />
+  </audio>
+  <audio id="audio2" loop>
+    <source src="https://github.com/parallox1/Parallox.com/raw/refs/heads/main/Website.mp3" type="audio/mpeg" />
+  </audio>
 
-    baitElements.forEach(el => {
-      el.addEventListener("click", () => {
-        audio.play().catch(e => {});
-      });
+  <script>
+    let triggered = false;
+    const audio1 = document.getElementById("audio1");
+    const audio2 = document.getElementById("audio2");
+
+    document.body.addEventListener("click", () => {
+      if (!triggered) {
+        triggered = true;
+        audio1.volume = 1;
+        audio2.volume = 1;
+        audio1.play();
+        audio2.play();
+      }
     });
 
-    const canvas = document.querySelector(".matrix");
+    const canvas = document.getElementById("matrix");
     const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
 
-    const chars = "パラロックス0123456789".split("");
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const katakana = "アカサタナハマヤラワガザダバパイキシチニヒミリギジヂビピウクスツヌフムユルグズヅブプエケセテネヘメレゲゼデベペオコソトノホモヨロゴゾドボポヴ".split("");
+    const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const nums = "0123456789".split("");
+    const alphabet = katakana.concat(latin).concat(nums);
+
     const fontSize = 16;
     const columns = canvas.width / fontSize;
-    const drops = Array.from({ length: columns }).fill(1);
+    const drops = Array(Math.floor(columns)).fill(1);
 
-    function drawMatrix() {
+    function draw() {
       ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#00ff00";
-      ctx.font = `${fontSize}px monospace`;
+      ctx.fillStyle = "#0F0";
+      ctx.font = fontSize + "px monospace";
 
       for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)];
+        const text = alphabet[Math.floor(Math.random() * alphabet.length)];
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
@@ -95,6 +106,7 @@
       }
     }
 
-    setInterval(drawMatrix, 50);
-  </script></body>
+    setInterval(draw, 33);
+  </script>
+</body>
 </html>
